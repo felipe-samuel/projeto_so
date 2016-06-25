@@ -1,0 +1,122 @@
+{% extends "layout.html" %}
+{% block content %}
+<style>
+#container {
+  width: 750px;
+  height: 400px;
+  position: relative;
+  background: yellow;
+}
+
+#animate {
+    border-radius: 50px/50px;
+
+    width:50px;
+    height:50px;
+
+  position: relative;
+  left = 0;
+  background-color: red;
+}
+
+#animate2 {
+  border-radius: 50px/50px;
+
+  width: 50px;
+  height: 50px;
+  position: relative;
+  left=0;
+
+  background-color: blue;
+}
+</style>
+
+
+
+	<div class="home">
+
+		<p>
+		<button onclick="vai1()">vai1</button>
+		<button onclick="volta1()">volta1</button>
+		</p>
+
+
+		<p>
+		<button onclick="vai2()">vai2</button>
+		<button onclick="volta2()">volta2</button>
+		</p>
+
+
+		<div id ="container">
+		<div id ="animate"></div>
+		<div id ="animate2"></div>
+
+		</div>
+
+		<script>
+
+		var pos = [0,0,0];
+		var end = [0,0,0];
+
+		function vai1(){
+			 vai(0,"animate");
+		}
+
+		function volta1(){
+			 volta(0,"animate");
+		}
+
+		function vai2(){
+			 vai(1,"animate2");
+		}
+
+		function volta2(){
+			 volta(1,"animate2");
+		}
+
+
+
+		function vai(i,elem_id) {
+		  var elem = document.getElementById(elem_id);
+		  var id = setInterval(frame, 5);
+		  end[i] = pos[i] + 350;
+
+			if(end[i]>700)
+				end[i]=700;
+
+
+		  function frame() {
+		    if (pos[i] == end[i]) {
+		      clearInterval(id);
+		    } else {
+		      pos[i]++;
+		      elem.style.left = pos[i] + 'px';
+		    }
+		  }
+		}
+
+		function volta(i,elem_id) {
+		  var elem = document.getElementById(elem_id);
+		  var id = setInterval(frame, 5);
+			end[i] = pos[i] - 350;
+
+			if(end[i]<0)
+				end[i]=0;
+
+		  function frame() {
+		    if (pos[i] == end[i]) {
+		      clearInterval(id);
+		    } else {
+		      pos[i]--;
+		      elem.style.left = pos[i] + 'px';
+		    }
+		  }
+		}
+
+
+
+		</script>
+
+
+	</div>
+{% endblock %}
