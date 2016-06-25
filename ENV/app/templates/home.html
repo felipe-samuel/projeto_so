@@ -36,9 +36,16 @@
 	<div class="home">
 
 		<p>
-		<button onclick="move1()">move1</button>
-		<button onclick="move2()">move2</button>
+		<button onclick="vai1()">vai1</button>
+		<button onclick="volta1()">volta1</button>
 		</p>
+
+
+		<p>
+		<button onclick="vai2()">vai2</button>
+		<button onclick="volta2()">volta2</button>
+		</p>
+
 
 		<div id ="container">
 		<div id ="animate"></div>
@@ -51,24 +58,32 @@
 		var pos = [0,0,0];
 		var end = [0,0,0];
 
-		function move1(){
-		   vai(0,"animate");
-
+		function vai1(){
+			 vai(0,"animate");
 		}
 
-		function move2(){
-			while (pos[0]!=350) {
-
-			}
+		function volta1(){
 			 volta(0,"animate");
-
 		}
+
+		function vai2(){
+			 vai(1,"animate2");
+		}
+
+		function volta2(){
+			 volta(1,"animate2");
+		}
+
 
 
 		function vai(i,elem_id) {
 		  var elem = document.getElementById(elem_id);
 		  var id = setInterval(frame, 5);
 		  end[i] = pos[i] + 350;
+
+			if(end[i]>700)
+				end[i]=700;
+
 
 		  function frame() {
 		    if (pos[i] == end[i]) {
@@ -84,6 +99,9 @@
 		  var elem = document.getElementById(elem_id);
 		  var id = setInterval(frame, 5);
 			end[i] = pos[i] - 350;
+
+			if(end[i]<0)
+				end[i]=0;
 
 		  function frame() {
 		    if (pos[i] == end[i]) {
