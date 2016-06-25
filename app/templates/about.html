@@ -2,18 +2,88 @@
 {% block content %}
    <div class="about">
 
+     <h2>Escalonamento</h2>
+
+     <p>Um ponto crucial no desenvolvimento de um Sistema Operacional
+    Multiprogramável é como alocar de forma eficiente o processador
+    (CPU) para os vários processos prontos para serem executados;</p>
+
+
+    <p>Para implementar o compartilhamento da CPU entre os diversos processos
+    no estado pronto, deve existir um critério para determinar, qual
+    o próximo processo a executar;</p>
+
+    <h2>Objetivos de um escalonamento</h2>
+
+    <ul>
+      <li>Maximizar uso da CPU;</li>
+      <li>Maximizar a produtividade;</li>
+      <li>“Justiça” entre os processos;</li>
+      <li>Minimizar tempo de resposta.</li>
+    </ul>
+
+    <h2>Escalonamento – Não Preemptivo</h2>
+
+      <p>Quando o processador alocado para um determinado processo não pode ser
+      retirado deste até que o processo seja finalizado ou seja bloqueado.</p>
+
+    <h3>Algoritmo FIFO</h3>
+
+      <p>O primeiro processo que solicita a CPU é o primeiro a ser selecionado
+        para execução;</p>
+
+      <p>Os processos que estão prontos para serem executados pela CPU são
+         organizados numa fila, que funciona baseado na política FIFO
+         (First in First out – Primeiro a entrar é o primeiro a sair).</p>
+
+    <h3>Algoritmo Menor Tarefa Primeiro</h3>
+
+      <p>O processo que tem o menor ciclo de processamento (tempo de execução)
+        é selecionado para usar o processador.</p>
+      <p>O processo executando não perde o processador para um processo de menor duração.</p>
+
+
+    <h2>Escalonamento – Preemptivo</h2>
+
+      <p>Quando o processador alocado para um determinado processo pode ser
+        retirado deste em favor de um outro processo.</p>
+
+
+    <h3>Algoritmo Round Robin</h3>
+
+      <p>Conhecido também como algoritmo de escalonamento circular, também organiza
+        a lista de processos prontos como uma fila simples, semelhante ao algoritmo FIFO;</p>
+      <p>O primeiro processo na fila de prontos recebe o processador;</p>
+      <p>No entanto, cada processo recebe uma fatia de tempo do processador,
+         comumente chamado de quantum.</p>
+      <p>Um processo executa durante um quantum específico. Se o quantum for
+        suficiente para este processo finalizar, outro processo do início da
+        fila é selecionado para executar. Se durante sua execução o processo se
+        bloquear (antes do término do quantum), outro processo da fila de prontos
+        também é selecionado. Se terminar a fatia de tempo do processo em execução,
+         a CPU sofre preempção e fica disponível para outro processo.</p>
+
+    <h3>Algoritmo por Prioridades</h3>
+
+      <p>os processos são organizados na fila de prontos baseado em prioridades.</p>
+      <p>A cada processo é atribuído uma prioridade; </p>
+      <p>O processo com maior prioridade na fila de prontos receberá o processador;</p>
+      <p>O processo que está executando pode ser interrompido pela chegada
+        na fila de prontos de um processo de maior prioridade.</p>
+      <p>Algoritmo de Múltiplas Filas</p>
+      <p>Prioridades são atribuídas à classe de processos (de acordo com
+        o tipo de processamento), cada qual com sua própria fila de prontos com
+         seu mecanismo de escalonamento;</p>
+      <p>Processos das classes de maior prioridade recebem o processador;</p>
+      <p>Os processos das classes de menor prioridade só receberão o processador
+        se as filas de prontos das outras classes (de maior prioridade) estiverem
+         vazias;</p>
+      <p>Pode ser realizado retroalimentação em multiníveis.</p>
+
 
    </div>
+
+
+
+
  {% endblock %}
-
-
-
- div {
-    display: block;
-    background-color: #666;
-    width: 100px;
-    height: 40px;
-    border: solid 5px red;
- }
-
-div:hover { border: solid 5px black; }
