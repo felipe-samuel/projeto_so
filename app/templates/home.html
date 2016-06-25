@@ -184,10 +184,21 @@
 
     function fifo(i)
     {
-      if(executando==0)
-        vai(i);
-      else
-        setTimeout(fifo(i),300);
+      $("p").hide();
+      animate( );
+
+      for(j=0 ; j<350; j++)
+      {
+          pos[i]++;
+      }
+
+      for(j=0 ; j<350; j++)
+      {
+          pos[i+1]++;
+      }
+
+
+
     }
 
 		function vai(i) {
@@ -235,6 +246,18 @@
 		  }
 		}
 
+    function animate(){
+
+      var id = setInterval(frame, 5);
+
+      function frame() {
+        for(elem_num = 0 ; elem_num < 10 ; elem_num++)
+        {
+          var elem = document.getElementById("animate"+elem_num);
+          elem.style.left = pos[elem_num] + 'px';
+        }
+      }
+    }
 
 
 		</script>
