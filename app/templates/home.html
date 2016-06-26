@@ -6,8 +6,9 @@
   width: 750px;
   height: 500px;
   position: relative;
-  background: yellow;
+  background: #669999;
 }
+
 
 #animate0 {
     border-radius: 50px/50px;
@@ -159,16 +160,17 @@
 
 
 		<div id ="container">
-		<div id ="animate0"></div>
-    <div id ="animate1"></div>
-		<div id ="animate2"></div>
-    <div id ="animate3"></div>
-    <div id ="animate4"></div>
-    <div id ="animate5"></div>
-    <div id ="animate6"></div>
-    <div id ="animate7"></div>
-    <div id ="animate8"></div>
-    <div id ="animate9"></div>
+
+		<div id ="animate0">&nbsp; &nbsp;<font size="6">0</font>	</div>
+    <div id ="animate1">&nbsp; &nbsp;<font size="6">1</font>	</div>
+		<div id ="animate2">&nbsp; &nbsp;<font size="6">2</font>	</div>
+    <div id ="animate3">&nbsp; &nbsp;<font size="6">3</font>	</div>
+    <div id ="animate4">&nbsp; &nbsp;<font size="6">4</font>	</div>
+    <div id ="animate5">&nbsp; &nbsp;<font size="6">5</font>	</div>
+    <div id ="animate6">&nbsp; &nbsp;<font size="6">6</font>	</div>
+    <div id ="animate7">&nbsp; &nbsp;<font size="6">7</font>	</div>
+    <div id ="animate8">&nbsp; &nbsp;<font size="6">8</font>	</div>
+    <div id ="animate9">&nbsp; &nbsp;<font size="6">9</font>	</div>
 
 		</div>
 
@@ -181,7 +183,7 @@
     {
       document.getElementById("textoresposta2").innerHTML = "";
 
-      if(processos.length<10)
+      if(processos.length<10 && executando==0)
       {
         var temp_index = processos.length;
         processos.push( {
@@ -204,7 +206,11 @@
                           "tempo de burst: " + processos[i].t_burst + "\n"+
                           "prioridade: " + processos[i].prioridade + "<br>";
       }
-      else {
+      else if (executando ==1) {
+        document.getElementById("textoresposta2").innerHTML = "Não é possivel adicionar processos durante a animação";
+      }
+      else
+      {
         document.getElementById("textoresposta2").innerHTML = "Número maximo de processos atingido";
       }
     }
@@ -213,7 +219,7 @@
     {
       document.getElementById("textoresposta2").innerHTML = "";
 
-      if(processos.length>0)
+      if(processos.length>0 && executando==0)
       {
         processos.pop( );
 
@@ -230,6 +236,9 @@
                           "tempo de burst: " + processos[i].t_burst + "\n"+
                           "prioridade: " + processos[i].prioridade + "<br>";
       }
+      else if (executando ==1) {
+        document.getElementById("textoresposta2").innerHTML = "Não é possivel remover processos durante a animação";
+      }
       else {
         document.getElementById("textoresposta2").innerHTML = "Nenhum processo a deletar";
       }
@@ -237,7 +246,7 @@
 
     function fifo( )
     {
-      if(executando == 0)
+      if(executando == 0 && processos.length>0)
       {
         executando = 1;
         var tempo_acumulado = 0;
@@ -251,11 +260,6 @@
           }
         );
 
-
-        for (var i = 0; i < proc.length; i++)
-          $("#animate"+i).animate({duration:0, left: "0px"});
-
-
         for (var i = 0; i < proc.length; i++) {
 
           if(i==proc.length-1)
@@ -264,7 +268,10 @@
                 .animate({left: "350px"})
                 .delay(proc[i].t_burst*1000).animate(
                           {left: "700px"},
-                          {complete: function(){executando = 0;}
+                          {complete: function(){
+                            for (var i = 0; i < proc.length; i++)
+                              $("#animate"+i).animate({duration:0, left: "0px"});
+                            executando = 0;}
                           });
           else
               $("#animate"+proc[i].index).delay(tempo_acumulado*1000)
@@ -276,10 +283,6 @@
 
           tempo_acumulado = tempo_acumulado + parseFloat(proc[i].t_burst) +
                                   parseFloat(proc[i].t_chegada)  + 0.4;
-
-
-          document.getElementById("textoresposta2").innerHTML =
-          document.getElementById("textoresposta2").innerHTML + tempo_acumulado+"<br>";
 
         }
 
