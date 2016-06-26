@@ -17,10 +17,8 @@
 
   position: relative;
   left = 0;
-  background-color: red;
-
-  tempo: 0;
-
+  background-color: blue;
+  display: none;
 }
 
 
@@ -33,8 +31,7 @@
   left=0;
 
   background-color: blue;
-
-  tempo = 0;
+  display: none;
 }
 
 
@@ -47,6 +44,7 @@
   left=0;
 
   background-color: blue;
+  display: none;
 }
 
 #animate3 {
@@ -58,6 +56,7 @@
   left=0;
 
   background-color: blue;
+  display: none;
 }
 
 #animate4 {
@@ -69,6 +68,7 @@
   left=0;
 
   background-color: blue;
+  display: none;
 }
 
 #animate5 {
@@ -80,6 +80,7 @@
   left=0;
 
   background-color: blue;
+  display: none;
 }
 
 #animate6 {
@@ -91,6 +92,7 @@
   left=0;
 
   background-color: blue;
+  display: none;
 }
 
 #animate7 {
@@ -102,6 +104,7 @@
   left=0;
 
   background-color: blue;
+  display: none;
 }
 
 #animate8 {
@@ -113,6 +116,7 @@
   left=0;
 
   background-color: blue;
+  display: none;
 }
 
 #animate9 {
@@ -124,6 +128,7 @@
   left=0;
 
   background-color: blue;
+  display: none;
 }
 
 
@@ -132,15 +137,21 @@
 
 	<div class="home">
 
-		<p>
-		<button onclick="vai1()">vai1</button>
-		<button onclick="volta1()">volta1</button>
-		</p>
+    <h2>Ferramenta de Simulação de Escalonadores</h2>
 
-
+    <p><input type="number" id="tchegada" min="0" step="0.1" value="0"> tempo de chegada </p>
+    <p><input type="number" id="tburst" min="0" step="0.1" value="0"> tempo de burst</p>
+    <p><input type="number" id="prioridade" min="0" step="1" value="0"> prioridade</p>
 
     <p>
-    <button onclick="fifo()">fifo</button>
+    <button onclick="addp()">adicionar processo</button>
+    <button onclick="rmp()">deletar ultimo processo</button>
+    </p>
+
+    <p id = textoresposta1></p>
+    <p id = textoresposta2></p>
+
+    <p>
     <button onclick="fifo()">fifo</button>
     </p>
 
@@ -163,20 +174,65 @@
 
 		<script>
 
-		var pos        = [0,0,0,0,0,0,0,0,0,0];
-		var end        = [0,0,0,0,0,0,0,0,0,0];
-    var tempo      = [1,2,1,3,1,2,1,1,5,4];
     var executando = 0;
-    var checagem;
+    var processos = [];
 
-		function hide(elem_id){
-      var elem = document.getElementById(elem_id);
-      elem.style.display = 'none';
-		}
+    function addp()
+    {
+      document.getElementById("textoresposta2").innerHTML = "";
 
-    function show(elem_id){
-      var elem = document.getElementById(elem_id);
-      elem.style.display = 'inline';
+      if(processos.length<10)
+      {
+        var temp_index = processos.length;
+        processos.push( {
+            index: temp_index,
+            t_chegada: document.getElementById("tchegada").value,
+            t_burst: document.getElementById("tburst").value,
+            prioridade: document.getElementById("prioridade").value
+        });
+
+        document.getElementById("textoresposta1").innerHTML = ""
+
+        var numero =  processos.length -1;
+        $("#animate"+numero).show();
+
+        for (var i = 0; i < processos.length; i++)
+          document.getElementById("textoresposta1").innerHTML =
+                          document.getElementById("textoresposta1").innerHTML +
+                          "Processo " + processos[i].index + "\n"+
+                          "tempo de chegada: " + processos[i].t_chegada + "\n"+
+                          "tempo de burst: " + processos[i].t_burst + "\n"+
+                          "prioridade: " + processos[i].prioridade + "<br>";
+      }
+      else {
+        document.getElementById("textoresposta2").innerHTML = "Número maximo de processos atingido";
+      }
+    }
+
+    function rmp()
+    {
+      document.getElementById("textoresposta2").innerHTML = "";
+
+      if(processos.length>0)
+      {
+        processos.pop( );
+
+        document.getElementById("textoresposta1").innerHTML = ""
+
+        var numero =  processos.length;
+        $("#animate"+numero).hide();
+
+        for (var i = 0; i < processos.length; i++)
+          document.getElementById("textoresposta1").innerHTML =
+                          document.getElementById("textoresposta1").innerHTML +
+                          "Processo " + i + "\n"+
+                          "tempo de chegada: " + processos[i].t_chegada + "\n"+
+                          "tempo de burst: " + processos[i].t_burst + "\n"+
+                          "prioridade: " + processos[i].prioridade + "<br>";
+      }
+      else {
+        document.getElementById("textoresposta2").innerHTML = "Nenhum processo a deletar";
+      }
     }
 
     function fifo( )
@@ -184,43 +240,75 @@
       if(executando == 0)
       {
         executando = 1;
-        var tempo_comeco = 0;
-        for (var i = 0; i < 10; i++)
+        var tempo_acumulado = 0;
+        for (var i = 0; i < processos.length; i++)
+          $("#animate"+i).animate({duration:0, left: "0px"});
+
+        var proc = processos.slice();
+        proc.sort(
+          function(a,b) {
+            return parseFloat(a.t_chegada) - parseFloat(b.t_chegada);
+          }
+        );
+
+
+        for (var i = 0; i < proc.length; i++)
           $("#animate"+i).animate({duration:0, left: "0px"});
 
 
-        for (var i = 0; i < 10; i++)
-        {
-          if(i==9)
-              $("#animate"+i).delay(tempo_comeco*1000)
+        for (var i = 0; i < proc.length; i++) {
+
+          if(i==proc.length-1)
+              $("#animate"+proc[i].index).delay(tempo_acumulado*1000)
+                .delay(parseFloat(proc[i].t_chegada)*1000)
                 .animate({left: "350px"})
-                .delay(tempo[i]*1000).animate(
+                .delay(proc[i].t_burst*1000).animate(
                           {left: "700px"},
                           {complete: function(){executando = 0;}
                           });
           else
-              $("#animate"+i).delay(tempo_comeco*1000)
+              $("#animate"+proc[i].index).delay(tempo_acumulado*1000)
+                .delay(parseFloat(proc[i].t_chegada)*1000)
                 .animate({left: "350px"})
-                .delay(tempo[i]*1000).animate(
-                          {left: "700px"});
+                .delay(proc[i].t_burst*1000).animate(
+                          {left: "700px"}
+                          );
+
+          tempo_acumulado = tempo_acumulado + parseFloat(proc[i].t_burst) +
+                                  parseFloat(proc[i].t_chegada)  + 0.4;
 
 
-          tempo_comeco = tempo_comeco + tempo[i] + 0.4;
+          document.getElementById("textoresposta2").innerHTML =
+          document.getElementById("textoresposta2").innerHTML + tempo_acumulado+"<br>";
 
         }
+
+
+
+
+
+
       }
     }
 
 
     function menor_tarefa_primeiro( )
     {
-      var tempo_comeco = [0,0,0,0,0,0,0,0,0,0];
-      var atraso = 0;
+      if(i==processos.length-1)
+          $("#animate"+proc[i].index).delay(tempo_comeco*1000)
+            .animate({left: "350px"})
+            .delay(proc[i].t_burst*1000).animate(
+                      {left: "700px"},
+                      {complete: function(){executando = 0;}
+                      });
+      else
+          $("#animate"+proc[i].index).delay(tempo_comeco*1000)
+            .animate({left: "350px"})
+            .delay(proc[i].t_burst*1000).animate({left: "700px"});
 
-      for (var i = 0; i < tempo.length; i++) {
-        
-        array[i]
-      }
+
+      tempo_comeco = tempo_comeco + proc[i].t_burst + proc[i].t_chegada + 0.4;
+
 
     }
 
